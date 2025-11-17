@@ -130,30 +130,40 @@
 
     /* --- GO BACK --- */
     function goBack() {
-        document.body.style.backgroundImage = `url('${DEFAULT_BG}')`;
+    document.body.style.backgroundImage = `url('${DEFAULT_BG}')`;
 
-        contentBox.innerHTML = `
-            <h1 id="question">O Gunjan, shaadi karogi mujhse ?</h1>
-            <button id="yesBtn" onclick="sayYes()">Off course !!! 💍</button>
-            <button id="noBtn">Chal Hatt 😒</button>
-        `;
+    contentBox.innerHTML = `
+        <h1 id="question">O Gunjan, shaadi karogi mujhse ?</h1>
+        <button id="yesBtn" onclick="sayYes()">Off course !!! 💍</button>
+        <button id="noBtn">Chal Hatt 😒</button>
+    `;
 
-        const newNoBtn = document.getElementById("noBtn");
+    const newNoBtn = document.getElementById("noBtn");
 
-        newNoBtn.addEventListener("mouseover", moveNoButton);
-        newNoBtn.addEventListener("touchstart", (e) => {
-            e.preventDefault();
-            moveNoButton();
-        });
-        newNoBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            moveNoButton();
-        });
-    }
+    /* IMPORTANT FIX */
+    newNoBtn.style.position = "absolute";  
+    newNoBtn.style.left = "50%";
+    newNoBtn.style.top = "50%";
+
+    // Add event listeners again
+    newNoBtn.addEventListener("mouseover", moveNoButton);
+
+    newNoBtn.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        moveNoButton();
+    });
+
+    newNoBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        moveNoButton();
+    });
+}
+
 </script>
 
 </body>
 </html>
+
 
 
 
