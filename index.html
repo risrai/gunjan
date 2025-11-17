@@ -163,48 +163,11 @@ celebrate(); // 🎉 Add this line
 }
 
 
-    /* --- GO BACK --- */
-    function goBack() {
-    document.body.style.backgroundImage = `url('${DEFAULT_BG}')`;
-
-    // Completely rebuild the box (this part is fine)
-    contentBox.innerHTML = `
-        <h1 id="question">O Gunjan, shaadi karogi mujhse ?</h1>
-        <button id="yesBtn" onclick="sayYes()">Off course !!! 💍</button>
-        <button id="noBtn">Chal Hatt 😒</button>
-    `;
-
-    // Get the NEW No button
-    const newNoBtn = document.getElementById("noBtn");
-
-    // 🔥 FORCE FULL RESET 🔥
-    newNoBtn.style.position = "absolute";
-    newNoBtn.style.left = "50%";
-    newNoBtn.style.top = "60%";
-
-    // 🔥 CRITICAL FIX: FORCE RELAYOUT 🔥
-    // Without this, mobile browsers keep the old button geometry cached.
-    newNoBtn.getBoundingClientRect();
-
-    // Reattach all movement logic
-    newNoBtn.addEventListener("mouseover", moveNoButton);
-
-    newNoBtn.addEventListener("touchstart", (e) => {
-        e.preventDefault();
-        moveNoButton();
-    });
-
-    newNoBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        moveNoButton();
-    });
-}
-
-
 </script>
 
 </body>
 </html>
+
 
 
 
