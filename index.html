@@ -110,14 +110,14 @@
     // Try autoplay
     audio.play().then(() => {
         // Jump to a specific time (in seconds)
-        audio.currentTime = 30;   // Start from 0:30
+        audio.currentTime = 15;   // Start from 0:15
     }).catch(() => {
         // Autoplay blocked: show a button
         const btn = document.createElement("button");
         btn.innerText = "Play Music 🎵";
         btn.style.fontSize = "20px";
         btn.onclick = () => {
-            audio.currentTime = 30; // Set time before playing
+            audio.currentTime = 15; // Set time before playing
             audio.play();
             btn.remove();
         };
@@ -130,6 +130,7 @@
 
 </body>
 </html>
+
 
 
 
