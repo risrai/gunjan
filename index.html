@@ -94,7 +94,8 @@
 <div class="box" style="display:none;" id="contentBox">
 
     <audio id="bgMusic">
-  <source src="song.mp3" type="audio/mpeg">
+
+         <source src="tohre_mein" type="audio/mpeg">
 </audio>
     
     
@@ -109,7 +110,7 @@
     // Try autoplay
     audio.play().then(() => {
         // Jump to a specific time (in seconds)
-        audio.currentTime = 16;   // Start from 0:30
+        audio.currentTime = 30;   // Start from 0:30
     }).catch(() => {
         // Autoplay blocked: show a button
         const btn = document.createElement("button");
@@ -129,6 +130,7 @@
 
 </body>
 </html>
+
 
 
 
