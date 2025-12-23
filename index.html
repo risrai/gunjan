@@ -95,7 +95,7 @@
 
     <audio id="bgMusic">
 
-         <source src="tohre_mein.mp3" type="audio/mpeg">
+         <source src="mehrari_jhakas.mp3" type="audio/mpeg">
 </audio>
     
     
@@ -104,32 +104,42 @@
 </div>
 
 <script>
-    window.addEventListener("load", function () {
+window.addEventListener("load", function () {
     const audio = document.getElementById("bgMusic");
+
+    const LOOP_START = 18; // seconds
+    const LOOP_END = 55;   // seconds
+
+    // Loop logic
+    audio.addEventListener("timeupdate", () => {
+        if (audio.currentTime >= LOOP_END) {
+            audio.currentTime = LOOP_START;
+            audio.play();
+        }
+    });
 
     // Try autoplay
     audio.play().then(() => {
-        // Jump to a specific time (in seconds)
-        audio.currentTime = 15;   // Start from 0:15
+        audio.currentTime = LOOP_START;
     }).catch(() => {
         // Autoplay blocked: show a button
         const btn = document.createElement("button");
         btn.innerText = "Play Music 🎵";
         btn.style.fontSize = "20px";
         btn.onclick = () => {
-            audio.currentTime = 15; // Set time before playing
+            audio.currentTime = LOOP_START;
             audio.play();
             btn.remove();
         };
         document.body.appendChild(btn);
     });
 });
-
-
 </script>
+
 
 </body>
 </html>
+
 
 
 
