@@ -85,11 +85,25 @@
     0% { transform: translateY(0) rotate(0deg); }
     100% { transform: translateY(110vh) rotate(720deg); }
 }
+/* Two background layers for cross-fade */
+.bg-layer {
+    position: fixed;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: opacity 1.2s ease-in-out;
+    z-index: -1;
+}
 
+#bg1 { opacity: 1; }
+#bg2 { opacity: 0; }
 </style>
 </head>
 
 <body>
+<div id="bg1" class="bg-layer"></div>
+<div id="bg2" class="bg-layer"></div>
 
 <div class="box" style="display:none;" id="contentBox">
 
@@ -104,32 +118,101 @@
 </div>
 
 <script>
-    window.addEventListener("load", function () {
+window.addEventListener("load", () => {
     const audio = document.getElementById("bgMusic");
 
-    // Try autoplay
+    const images = [
+        "pic1.jpg",
+        "pic2.jpg",
+        "pic3.jpg",
+        "pic4.jpg",
+        "pic5.jpg",
+        "pic7_india.jpg",
+         "pic8_lonavala.jpg",
+         "pic10.jpg",
+         "pic11.jpg",
+           "pic12.jpg",
+        "pic13.jpg",
+        "pic14.jpg",
+        "pic15.jpg"
+    ];
+
+    // Shuffle images (Fisher–Yates)
+    function shuffle(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+    }
+    shuffle(images);
+
+    const bg1 = document.getElementById("bg1");
+    const bg2 = document.getElementById("bg2");
+
+    let index = 0;
+    let active = 1;
+
+    bg1.style.backgroundImage = `url('${images[0]}')`;
+
+    function crossFade() {
+        const nextImg = images[index % images.length];
+        const incoming = active === 1 ? bg2 : bg1;
+        const outgoing = active === 1 ? bg1 : bg2;
+
+        incoming.style.backgroundImage = `url('${nextImg}')`;
+        incoming.style.opacity = 1;
+        outgoing.style.opacity = 0;
+
+        active = active === 1 ? 2 : 1;
+        index++;
+    }
+
+    /* 🎵 Beat-synced image switching
+       Change image every X seconds based on tempo.
+       Example: ~90 BPM → image every 2.6s
+    */
+    const BPM = 90;
+    const beatInterval = (60 / BPM) * 4 * 1000; // 4 beats per image
+
+    let imageTimer = null;
+
+    function startSlideshow() {
+        if (imageTimer) return;
+        imageTimer = setInterval(crossFade, beatInterval);
+    }
+
+    // Autoplay attempt
     audio.play().then(() => {
-        // Jump to a specific time (in seconds)
-        audio.currentTime = 15;   // Start from 0:15
+        audio.currentTime = 15;
+        startSlideshow();
     }).catch(() => {
-        // Autoplay blocked: show a button
         const btn = document.createElement("button");
         btn.innerText = "Play Music 🎵";
         btn.style.fontSize = "20px";
+
         btn.onclick = () => {
-            audio.currentTime = 15; // Set time before playing
+            audio.currentTime = 15;
             audio.play();
+            startSlideshow();
             btn.remove();
         };
+
         document.body.appendChild(btn);
     });
+
+    // Loop music between 15s–30s
+    audio.addEventListener("timeupdate", () => {
+        if (audio.currentTime >= 30) {
+            audio.currentTime = 15;
+        }
+    });
 });
-
-
 </script>
+
 
 </body>
 </html>
+
 
 
 
