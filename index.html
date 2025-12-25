@@ -121,8 +121,8 @@
 window.addEventListener("load", () => {
     const audio = document.getElementById("bgMusic");
 
-    const images = [
-        "pic1.jpg",
+    const allImages = [
+          "pic1.jpg",
         "pic2.jpg",
         "pic3.jpg",
         "pic4.jpg",
@@ -134,28 +134,37 @@ window.addEventListener("load", () => {
            "pic12.jpg",
         "pic13.jpg",
         "pic14.jpg",
-        "pic15.jpg"
+        "pic15.jpg",
+		"pic16.jpg",
+		"pic17.jpg",
+		"pic18.jpg"
     ];
 
-    // Shuffle images (Fisher–Yates)
+    let imageQueue = [];
+    let imageTimer = null;
+
+    const bg1 = document.getElementById("bg1");
+    const bg2 = document.getElementById("bg2");
+    let active = 1;
+
     function shuffle(arr) {
         for (let i = arr.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [arr[i], arr[j]] = [arr[j], arr[i]];
         }
     }
-    shuffle(images);
 
-    const bg1 = document.getElementById("bg1");
-    const bg2 = document.getElementById("bg2");
-
-    let index = 0;
-    let active = 1;
-
-    bg1.style.backgroundImage = `url('${images[0]}')`;
+    function refillQueue() {
+        imageQueue = [...allImages];
+        shuffle(imageQueue);
+    }
 
     function crossFade() {
-        const nextImg = images[index % images.length];
+        if (imageQueue.length === 0) {
+            refillQueue(); // reshuffle only AFTER all images shown
+        }
+
+        const nextImg = imageQueue.shift();
         const incoming = active === 1 ? bg2 : bg1;
         const outgoing = active === 1 ? bg1 : bg2;
 
@@ -164,24 +173,22 @@ window.addEventListener("load", () => {
         outgoing.style.opacity = 0;
 
         active = active === 1 ? 2 : 1;
-        index++;
     }
 
-    /* 🎵 Beat-synced image switching
-       Change image every X seconds based on tempo.
-       Example: ~90 BPM → image every 2.6s
-    */
-    const BPM = 90;
-    const beatInterval = (60 / BPM) * 4 * 1000; // 4 beats per image
+    // Set first image
+    refillQueue();
+    bg1.style.backgroundImage = `url('${imageQueue.shift()}')`;
 
-    let imageTimer = null;
+    /* Beat sync */
+    const BPM = 90;
+    const beatInterval = (60 / BPM) * 4 * 1000;
 
     function startSlideshow() {
         if (imageTimer) return;
-        imageTimer = setInterval(crossFade, beatInterval);
+        imageTimer = setInterval(crossFade, 3000);
     }
 
-    // Autoplay attempt
+    // Music start logic
     audio.play().then(() => {
         audio.currentTime = 15;
         startSlideshow();
@@ -196,22 +203,18 @@ window.addEventListener("load", () => {
             startSlideshow();
             btn.remove();
         };
-
         document.body.appendChild(btn);
     });
 
-    // Loop music between 15s–30s
-    audio.addEventListener("timeupdate", () => {
-        if (audio.currentTime >= 30) {
-            audio.currentTime = 15;
-        }
-    });
+   
 });
 </script>
 
 
+
 </body>
 </html>
+
 
 
 
